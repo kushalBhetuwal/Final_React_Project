@@ -20,7 +20,6 @@ class App extends Component {
   }
 
   onChange =(event)=>{
-    console.log(event);
     this.setState({input: event.target.value})
   }
 

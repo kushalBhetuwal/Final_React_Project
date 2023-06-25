@@ -1,0 +1,5 @@
+.boundingbox{
+    position:absolute;
+    box-shadow: 0 0 0 3px #360ed682 inset;
+    cursor: pointer;
+}

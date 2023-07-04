@@ -7,6 +7,8 @@ import ImageLinkForm from "./component/ImageLinkForm/imagelinkform";
 import Rank from "./component/Rank/rank";
 import ParticlesBg from "particles-bg";
 import FaceRecognition from "./component/FaceRecognition/facerecognition";
+import SigninForm from "./component/Signinform/signinform";
+import Register from "./component/Register/register";
 
 const setuprequest = (imageurl) => {
   const PAT = "87512310777b47cd8d484d74af44251c";
@@ -47,7 +49,8 @@ class App extends Component {
     this.state = {
       input: "",
       image: '', 
-      data: {}
+      data: {}, 
+      route:"signinform"
      
     };
   }
@@ -74,7 +77,7 @@ class App extends Component {
   onSubmit = () => {
     this.setState({image:this.state.input})
     
-    fetch("https://api.clarifai.com/v2/models/face-sentiment-recognition/outputs", setuprequest(this.state.input))
+    fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setuprequest(this.state.input))
       .then((response) => response.json())
       .then(response=>{
           console.log(response)
@@ -85,6 +88,10 @@ class App extends Component {
       .catch(error=>console.log(error));
       
     };
+
+    onRoutechange =(route)=>{
+      this.setState({route:route})
+    }
       
   
 
@@ -93,16 +100,32 @@ class App extends Component {
   };
 
   render() {
-    const{data,image} = this.state;
+    const{data,image,route} = this.state;
     return (
       <div className="App">
+        {route === 'signinform'?
+        <>
         <ParticlesBg type="cobweb" bg={true} />
-
-        <Navigation />
-        <Logo />
+        <SigninForm onroutechange={this.onRoutechange} /> 
+        
+        </>:
+       route ==="register"?<>
+        <ParticlesBg type="color" bg={true} />
+        <Register onroutechange ={this.onRoutechange} />
+        </>:
+        <>
+        <ParticlesBg type="lines" bg={true} />
+        <Navigation onroutechange={this.onRoutechange} />
+         <Logo />
         <Rank />
         <ImageLinkForm onsubmit={this.onSubmit} onchange={this.onChange} />
-        <FaceRecognition  data = {data} imageurl ={image}/>
+        <FaceRecognition  data = {data} imageurl ={image}/> 
+        </>
+    
+        }
+         
+      
+       
         
       </div>
     );

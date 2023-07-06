@@ -17,6 +17,27 @@ class SigninForm extends Component {
     onchangePassword = (event)=>{
       this.setState({Password: event.target.value})
     }
+
+    onsubmitButton =()=>{
+      fetch('http://localhost:3001/signin', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          email:this.state.Email,
+          password:this.state.Password
+        })
+      })
+      .then(response=>response.json())
+      .then(data=>{
+        if(data==="success"){
+          this.props.onroutechange("home")
+        }
+        else{
+          alert("invalid credentials!")
+        }
+      })
+    }
+
   
   render() {
     return (
@@ -25,7 +46,7 @@ class SigninForm extends Component {
           <article className="br3 bw1 ba b--inherit  mv4 w-100 w-100-m w-100-l mw-100 center shadow-4-ns ">
             <div className="relative pa4 pa5-m">
               <h1 className="serif tracked ma0 mb4 pv3">Sign In</h1>
-              <form action="" id="login" className="">
+              <div>
                 <div className="mb3">
                   <label
                     htmlFor="username"
@@ -38,7 +59,7 @@ class SigninForm extends Component {
                     type="text"
                     name="username"
                     className="input-reset db w-100 mw-100 white b pv2 ph3 bg-white-30 hover-bg-white-70 hover-gray outline-0 bn br-pill"
-                    autocomplete = "username"
+                    autoComplete = "username"
                   />
                 </div>
                 <div className="mb4">
@@ -58,25 +79,25 @@ class SigninForm extends Component {
                 </div>
                 <div>
                   <button
-                    onClick={() => this.props.onroutechange("home")}
+                    onClick={this.onsubmitButton}
                     className="input-reset db w-100 light-gray f6 b ttu tracked pv3 ph3 pointer bg-dark-blue hover-bg-blue bn br-pill"
                   >
                     Sign In
                   </button>
                 </div>
-                <div class="lh-copy mt3">
+                <div className="lh-copy mt3">
                   <a
                     onClick={() => this.props.onroutechange("register")}
                     href="#0"
-                    class="f5 b link dim black db"
+                    className="f5 b link dim black db"
                   >
                     Register
                   </a>
-                  <a href="#0" class="f5  b link dim black db">
+                  <a href="#0" className="f5  b link dim black db">
                     Forgot your password?
                   </a>
                 </div>
-              </form>
+              </div>
             </div>
           </article>
         </div>

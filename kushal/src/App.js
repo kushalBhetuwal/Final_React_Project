@@ -50,9 +50,23 @@ class App extends Component {
       input: "",
       image: '', 
       data: {}, 
-      route:"signinform"
+      route:"signinform",
+      user:{
+         name:"",
+         email:"",
+         entries:""
+      }
      
     };
+  }
+
+  loadUser =(data)=>{
+      this.setState({user:{
+        name:data.name,
+        email:data.email,
+        entries:data.entries
+
+      }})
   }
 
   calculatefacelocation =(data)=>{
@@ -106,7 +120,7 @@ class App extends Component {
         {route === 'signinform'?
         <>
         <ParticlesBg type="cobweb" bg={true} />
-        <SigninForm onroutechange={this.onRoutechange} /> 
+        <SigninForm loaduser = {this.loadUser} onroutechange={this.onRoutechange} /> 
         
         </>:
        route ==="register"?<>
@@ -117,16 +131,12 @@ class App extends Component {
         <ParticlesBg type="lines" bg={true} />
         <Navigation onroutechange={this.onRoutechange} />
          <Logo />
-        <Rank />
+        <Rank name = {this.state.user.name} rank = {this.state.user.entries}/>
         <ImageLinkForm onsubmit={this.onSubmit} onchange={this.onChange} />
         <FaceRecognition  data = {data} imageurl ={image}/> 
         </>
     
-        }
-         
-      
-       
-        
+        } 
       </div>
     );
   }

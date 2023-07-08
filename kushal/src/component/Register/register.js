@@ -8,9 +8,12 @@ class Register extends Component {
     this.state = {
       name:'',
       email: '',
-      password:""
+      password:"",
 
     }
+  }
+  onbutton =()=>{
+    this.props.onroutechange('signinform')
   }
 
   onchangeName =(event)=>{
@@ -25,7 +28,7 @@ class Register extends Component {
   }
 
  onsubmitRegister =()=>{
-  fetch('http://localhost:3001/register',{
+  fetch('http://localhost:3002/register',{
      method: 'POST',
      headers: {'Content-Type': 'application/json'},
      body: JSON.stringify({
@@ -37,15 +40,16 @@ class Register extends Component {
   .then(response=>response.json())
   .then(data=>{
     if(data){
-      if(data==="registered"){
+      if(data==="success"){
         this.props.onroutechange('signinform')
       }
       else{
-        alert('Please fill out the registration form')
+        alert('the credentials already exists')
       }
       
     }
   })
+  .catch(error=>{console.log(error)});
  }
 
   render(){
@@ -71,6 +75,7 @@ class Register extends Component {
         <div>
           <button onClick={this.onsubmitRegister} className="input-reset db w-100 light-gray f6 b ttu tracked pv3 ph3 pointer bg-dark-green hover-bg-blue bn br-pill">Register</button>
         </div>
+        <div className = "mt5 f4 ">Have an account? <button onClick= {this.onbutton} className="input-reset db w-100 light-gray f6 b ttu tracked pv3 ph3 pointer bg-dark-pink hover-bg-yellow bn br-pill">Signin</button></div>
         </div>
     </div>
               

@@ -19,7 +19,7 @@ class SigninForm extends Component {
     }
 
     onsubmitButton =()=>{
-      fetch('http://localhost:3001/signin', { 
+      fetch('http://localhost:3002/signin', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -29,14 +29,18 @@ class SigninForm extends Component {
       })
       .then(response=>response.json())
       .then(data=>{
-        if(data==="success"){
+        if(data.id){
+          this.props.loaduser(data);
           this.props.onroutechange("home")
         }
         else{
           alert("invalid credentials!")
         }
       })
+      .catch(err=>console.log(err))
     }
+
+    
 
   
   render() {

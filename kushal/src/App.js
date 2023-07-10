@@ -43,28 +43,33 @@ const setuprequest = (imageurl) => {
 
   return requestOptions;
 };
+
+const initialstate  = {
+    input: "",
+    image: '', 
+    data: {}, 
+    route:"signinform",
+    user:{
+       id:"",
+       name:"",
+       email:"",
+       entries:'',
+       joined:''
+    }
+}
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: "",
-      image: '', 
-      data: {}, 
-      route:"signinform",
-      user:{
-         name:"",
-         email:"",
-         entries:""
-      }
-     
-    };
+    this.state = initialstate
+  
   }
-
   loadUser =(data)=>{
       this.setState({user:{
         name:data.name,
         email:data.email,
-        entries:data.entries
+        entries:data.entries,
+        id:data.id,
+        joined:data.joined
 
       }})
   }
@@ -94,8 +99,22 @@ class App extends Component {
     fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setuprequest(this.state.input))
       .then((response) => response.json())
       .then(response=>{
-          console.log(response)
-         return  this.displayborderbox(this.calculatefacelocation(response.outputs[0].data.regions[0].region_info.bounding_box))
+           if(response){
+            fetch('http://localhost:3002/image', {
+              method:'put',
+              headers: { 'Content-Type': 'application/json'},
+              body:JSON.stringify({
+                id:this.state.user.id
+              })
+            })
+            .then(response=>response.json())
+            .then(count=>{
+              this.setState(Object.assign(this.state.user,{entries:count}))
+            })
+            .catch(err=>console.log(err))
+           }
+           return  this.displayborderbox(this.calculatefacelocation(response.outputs[0].data.regions[0].region_info.bounding_box))
+        
         
       })
       
@@ -104,7 +123,12 @@ class App extends Component {
     };
 
     onRoutechange =(route)=>{
-      this.setState({route:route})
+      if(route==="signout"){
+        this.setState(initialstate);
+      }
+      else{
+        this.setState({route:route})
+      }
     }
       
   
@@ -128,14 +152,13 @@ class App extends Component {
         <Register onroutechange ={this.onRoutechange} />
         </>:
         <>
-        <ParticlesBg type="lines" bg={true} />
+        <ParticlesBg type="fountain" bg={true} />
         <Navigation onroutechange={this.onRoutechange} />
          <Logo />
         <Rank name = {this.state.user.name} rank = {this.state.user.entries}/>
         <ImageLinkForm onsubmit={this.onSubmit} onchange={this.onChange} />
         <FaceRecognition  data = {data} imageurl ={image}/> 
         </>
-    
         } 
       </div>
     );

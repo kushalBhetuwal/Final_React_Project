@@ -34,7 +34,7 @@ class SigninForm extends Component {
           this.props.onroutechange("home")
         }
         else{
-          alert("invalid credentials!")
+          alert(data);
         }
       })
       .catch(err=>console.log(err))

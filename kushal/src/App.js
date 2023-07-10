@@ -73,6 +73,23 @@ class App extends Component {
 
       }})
   }
+  onbuttondelete=()=>{
+    fetch("http://localhost:3002/delete", {
+      method:'delete',
+      headers:{'Content-Type':'application/json'}, 
+      body:JSON.stringify({
+        email:this.state.user.email
+      })
+    })
+    .then(response=>response.json())
+    .then(data=>{
+      if(data){
+        alert(data)
+        this.setState({route:'signinform'})
+      }
+    })
+    .catch(err=>console.log(err));
+  }
 
   calculatefacelocation =(data)=>{
    
@@ -153,7 +170,7 @@ class App extends Component {
         </>:
         <>
         <ParticlesBg type="fountain" bg={true} />
-        <Navigation onroutechange={this.onRoutechange} />
+        <Navigation onbuttondelete = {this.onbuttondelete} onroutechange={this.onRoutechange} />
          <Logo />
         <Rank name = {this.state.user.name} rank = {this.state.user.entries}/>
         <ImageLinkForm onsubmit={this.onSubmit} onchange={this.onChange} />

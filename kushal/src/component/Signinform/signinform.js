@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./signinform.css";
+import Duplicate from "../DuplicateCode/duplicate";
 
 class SigninForm extends Component {
   constructor(props) {
@@ -39,73 +40,11 @@ class SigninForm extends Component {
       })
       .catch(err=>console.log(err))
     }
-
-    
-
-  
   render() {
     return (
-      <div>
-        <div className="courier w-90 white mw6 center relative cover bg-top mt2">
-          <article className="br3 bw1 ba b--inherit  mv4 w-100 w-100-m w-100-l mw-100 center shadow-4-ns ">
-            <div className="relative pa4 pa5-m">
-              <h1 className="serif tracked ma0 mb4 pv3">Sign In</h1>
-              <div>
-                <div className="mb3">
-                  <label
-                    htmlFor="username"
-                    className="db f6 white-80 ttu ph2 mb2"
-                  >
-                    Email
-                  </label>
-                  <input
-                  onChange = {this.onchangeEmail}
-                    type="text"
-                    name="username"
-                    className="input-reset db w-100 mw-100 white b pv2 ph3 bg-white-30 hover-bg-white-70 hover-gray outline-0 bn br-pill"
-                    autoComplete = "username"
-                  />
-                </div>
-                <div className="mb4">
-                  <label
-                    htmlFor="password"
-                    className="db f6 white-80 ttu ph2 mb2"
-                  >
-                    Password
-                  </label>
-                  <input
-                  onChange ={this.onchangePassword}
-                    type="password"
-                    name="password"
-                    className="input-reset db w-100 mw-100 white b pv2 ph3 bg-white-30 hover-bg-white-70 hover-gray outline-0 bn br-pill"
-                    autoComplete="current-password"
-                  />
-                </div>
-                <div>
-                  <button
-                    onClick={this.onsubmitButton}
-                    className="input-reset db w-100 light-gray f6 b ttu tracked pv3 ph3 pointer bg-dark-blue hover-bg-blue bn br-pill"
-                  >
-                    Sign In
-                  </button>
-                </div>
-                <div className="lh-copy mt3">
-                  <a
-                    onClick={() => this.props.onroutechange("register")}
-                    href="#0"
-                    className="f5 b link dim black db"
-                  >
-                    Register
-                  </a>
-                  <a href="#0" className="f5  b link dim black db">
-                    Forgot your password?
-                  </a>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
+      <Duplicate onchangeEmail={this.onchangeEmail} onchangePassword={this.onchangePassword} heading ="Signin" 
+      onroutechange={this.props.onroutechange} onsubmitButton1={this.onsubmitButton} showsigninbutton={true} showregisterbutton={true} />
+      
     );
   }
 }

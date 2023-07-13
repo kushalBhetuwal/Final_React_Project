@@ -10,39 +10,7 @@ import FaceRecognition from "./component/FaceRecognition/facerecognition";
 import SigninForm from "./component/Signinform/signinform";
 import Register from "./component/Register/register";
 
-const setuprequest = (imageurl) => {
-  const PAT = "87512310777b47cd8d484d74af44251c";
-  const USER_ID = "kushal123";
-  const APP_ID = "test";
-  const IMAGE_URL = imageurl;
 
-  const raw = JSON.stringify({
-    user_app_id: {
-      user_id: USER_ID,
-      app_id: APP_ID,
-    },
-    inputs: [
-      {
-        data: {
-          image: {
-            url: IMAGE_URL,
-          },
-        },
-      },
-    ],
-  });
-
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      Authorization: "Key " + PAT,
-    },
-    body: raw,
-  };
-
-  return requestOptions;
-};
 
 const initialstate  = {
     input: "",
@@ -82,7 +50,7 @@ class App extends Component {
       })
     })
     .then(response=>response.json())
-    .then(data=>{
+    .then(data=>{ 
       if(data){
         alert(data)
         this.setState({route:'signinform'})
@@ -111,34 +79,35 @@ class App extends Component {
   }
 
   onSubmit = () => {
-    this.setState({image:this.state.input})
-    
-    fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setuprequest(this.state.input))
-      .then((response) => response.json())
-      .then(response=>{
-           if(response){
-            fetch('http://localhost:3002/image', {
-              method:'put',
-              headers: { 'Content-Type': 'application/json'},
-              body:JSON.stringify({
-                id:this.state.user.id
-              })
-            })
-            .then(response=>response.json())
-            .then(count=>{
-              this.setState(Object.assign(this.state.user,{entries:count}))
-            })
-            .catch(err=>console.log(err))
-           }
-           return  this.displayborderbox(this.calculatefacelocation(response.outputs[0].data.regions[0].region_info.bounding_box))
-        
-        
+    this.setState({ image:this.state.input });
+  
+    fetch("http://localhost:3002/clari", { //i have used clarifai api in backend for security purposes:
+      method: "POST",
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify({
+        dt: this.state.input
       })
-      
-      .catch(error=>console.log(error));
-      
-    };
-
+    })
+      .then(response => response.json())
+      .then(response=>{
+        if(response){
+          fetch('http://localhost:3002/image', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: this.state.user.id
+          })
+        }).then(response => response.json())
+        .then(count=>{
+        this.setState(Object.assign(this.state.user, {entries:count}))
+        })
+        .catch(error => console.log(error))
+        
+       return this.displayborderbox( this.calculatefacelocation(response.outputs[0].data.regions[0].region_info.bounding_box))     
+        }    
+      })      
+  }
+  
     onRoutechange =(route)=>{
       if(route==="signout"){
         this.setState(initialstate);

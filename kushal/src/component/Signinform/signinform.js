@@ -2,14 +2,16 @@ import React, { Component } from "react";
 import "./signinform.css";
 import Duplicate from "../DuplicateCode/duplicate";
 
+
+
 class SigninForm extends Component {
   constructor(props) {
     super(props);
     this.state ={
-       Email:"",
-       Password: "" 
-
-       }  }
+      Email:"",
+      Password: ""
+    }
+   }
        onchangeEmail = (event)=>{
         this.setState({Email: event.target.value})
 
@@ -34,8 +36,9 @@ class SigninForm extends Component {
           this.props.loaduser(data);
           this.props.onroutechange("home")
         }
-        else{
-          alert(data);
+        else{  
+          alert(data)
+          
         }
       })
       .catch(err=>console.log(err))
